@@ -52,7 +52,12 @@ export function Header() {
         {Object.keys(stockData).map((symbol, index) => {
           const currentSymbol = stockData[symbol];
           return (
-            <Card symbol={symbol} price={currentSymbol.price} key={index} />
+            <Card
+              symbol={symbol}
+              percentage={currentSymbol.percentage}
+              price={currentSymbol.price}
+              key={index}
+            />
           );
         })}
       </div>
