@@ -48,7 +48,7 @@ export function Header() {
       style={{ scrollbarWidth: "none" }}
     >
       <div className="flex divide-x-2 space-x-4 px-4">
-        {stocks.map(({ symbol }) => {
+        {stocks.map(({ symbol, priceAlert }) => {
           const stock = stockData[symbol];
           return (
             <Card
@@ -56,6 +56,7 @@ export function Header() {
               price={stock?.price || 0}
               percentage={stock?.percentage || 0}
               key={`card-${symbol}`}
+              priceAlert={priceAlert}
             />
           );
         })}
