@@ -1,8 +1,40 @@
 "use client";
 
-import React from "react";
+import { getStocks } from "@/app/services/stocks";
+import { StockSymbolAPI } from "@/app/types/stock";
+import React, { useEffect, useState } from "react";
 
 export function Form() {
+  const [stocks, setStocks] = useState<StockSymbolAPI[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const getStocksApi = async () => {
+      setIsLoading(true);
+      try {
+        const data = await getStocks();
+        setStocks([
+          ...data,
+          { symbol: "OANDA:EUR_USD" },
+          { symbol: "BINANCE:ETHUSDT" },
+          { symbol: "BINANCE:BTCUSDT" },
+        ]);
+      } catch (error) {
+        console.log(
+          `There was an error to get stocks from api. Error: ${error}`
+        );
+        setStocks([
+          { symbol: "OANDA:EUR_USD" },
+          { symbol: "BINANCE:ETHUSDT" },
+          { symbol: "BINANCE:BTCUSDT" },
+        ]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    getStocksApi();
+  }, []);
+
   const onSubmit = () => {
     console.log("onSubmit ");
   };
@@ -10,19 +42,23 @@ export function Form() {
   return (
     <div className="flex flex-col border-2 rounded-md rad w-1/2 p-3 m-3  shadow-sm">
       <div className="flex items-center">
-        <label htmlFor="stocks" className="mr-10">
-          Stock:
-        </label>
-        <select
-          id="stocks"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-gray-500"
-        >
-          <option value="">Select</option>
-          <option value="eur/usd">EUR/USD</option>
-          <option value="eur/usd2">EUR/USD</option>
-          <option value="eur/usd2">EUR/USD</option>
-          <option value="eur/usd2">EUR/USD</option>
-        </select>
+        {!isLoading && (
+          <>
+            <label htmlFor="stocks" className="mr-10">
+              Stock:
+            </label>
+            <select
+              id="stocks"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-gray-500"
+            >
+              <option value="">Select</option>
+              <option value="eur/usd">EUR/USD</option>
+              <option value="eur/usd2">EUR/USD</option>
+              <option value="eur/usd2">EUR/USD</option>
+              <option value="eur/usd2">EUR/USD</option>
+            </select>
+          </>
+        )}
       </div>
 
       <div className="flex mt-5">

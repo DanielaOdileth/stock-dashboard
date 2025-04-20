@@ -4,3 +4,5 @@ export type Trade = {
   t: number;
   v: number;
 };
+
+export type StockSymbolAPI = { symbol: string };
