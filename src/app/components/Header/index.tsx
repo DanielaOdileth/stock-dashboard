@@ -4,21 +4,20 @@ import React, { useEffect, useState } from "react";
 import { Card } from "../Card";
 import finnHubWebSocket from "@/app/services/websocket";
 import { Trade } from "@/app/types/stock";
-
-const symbols = [
-  "OANDA:EUR_USD",
-  "BINANCE:ETHUSDT",
-  "BINANCE:BTCUSDT",
-  "AMZN",
-  "MSFT",
-];
+import { useStockContext } from "../context/StockContext";
 
 export function Header() {
   const [stockData, setStockData] = useState<
     Record<string, { price: number; percentage: number; time: number }>
   >({});
 
+  const { stocks } = useStockContext();
+
   useEffect(() => {
+    if (stocks.length === 0) {
+      return;
+    }
+
     function handleTradeUpdate(trades: Trade[]) {
       setStockData((prevData) => {
         const updatedData = { ...prevData };
@@ -38,10 +37,10 @@ export function Header() {
       });
     }
 
-    const cleanup = finnHubWebSocket(symbols, handleTradeUpdate);
+    const cleanup = finnHubWebSocket(stocks, handleTradeUpdate);
 
     return () => cleanup();
-  }, []);
+  }, [stocks]);
 
   return (
     <header
@@ -49,14 +48,14 @@ export function Header() {
       style={{ scrollbarWidth: "none" }}
     >
       <div className="flex divide-x-2 space-x-4 px-4">
-        {Object.keys(stockData).map((symbol, index) => {
-          const currentSymbol = stockData[symbol];
+        {stocks.map(({ symbol }) => {
+          const stock = stockData[symbol];
           return (
             <Card
               symbol={symbol}
-              percentage={currentSymbol.percentage}
-              price={currentSymbol.price}
-              key={index}
+              price={stock?.price || 0}
+              percentage={stock?.percentage || 0}
+              key={`card-${symbol}`}
             />
           );
         })}

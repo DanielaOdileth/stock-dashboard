@@ -6,3 +6,8 @@ export type Trade = {
 };
 
 export type StockSymbolAPI = { symbol: string };
+
+export type Symbol = {
+  symbol: string;
+  priceAlert: number;
+};

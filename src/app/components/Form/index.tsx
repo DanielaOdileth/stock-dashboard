@@ -2,12 +2,15 @@
 
 import React, { useState } from "react";
 import { Select } from "../Select";
+import { useStockContext } from "../context/StockContext";
 
 export function Form() {
   const [symbolSelected, setSymbolSelected] = useState<string>("");
   const [priceAlert, setPriceAlert] = useState<string | number>("");
+  const { addStock } = useStockContext();
 
   const onSubmit = () => {
+    addStock({ symbol: symbolSelected, priceAlert: Number(priceAlert) });
     setPriceAlert("");
     setSymbolSelected("");
   };

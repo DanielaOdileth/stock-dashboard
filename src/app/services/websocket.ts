@@ -1,4 +1,4 @@
-import { Trade } from "../types/stock";
+import { Symbol, Trade } from "../types/stock";
 
 const finnHubUrl = process.env.NEXT_PUBLIC_FINN_HUB_WEEBSOCKET_URL;
 const finnHubApiKey = process.env.NEXT_PUBLIC_FINN_HUB_API_KEY;
@@ -15,7 +15,7 @@ const filterTrades = (trades: Trade[]) => {
 };
 
 const finnHubWebSocket = (
-  symbols: string[],
+  symbols: Symbol[],
   callback: (data: Trade[]) => void
 ) => {
   const socket = new WebSocket(`${finnHubUrl}?token=${finnHubApiKey}`);
@@ -35,13 +35,13 @@ const finnHubWebSocket = (
   };
 
   const subscribe = () => {
-    symbols.forEach((symbol) => {
+    symbols.forEach(({ symbol }) => {
       send({ type: "subscribe", symbol });
     });
   };
 
   const unsubscribe = () => {
-    symbols.forEach((symbol) => {
+    symbols.forEach(({ symbol }) => {
       send({ type: "unsubscribe", symbol });
     });
   };

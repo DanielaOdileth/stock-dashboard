@@ -2,6 +2,7 @@ import { getStocks } from "@/app/services/stocks";
 import { StockSymbolAPI } from "@/app/types/stock";
 import React, { useState, useMemo, useEffect } from "react";
 import { FixedSizeList as List } from "react-window";
+import { useStockContext } from "../context/StockContext";
 
 export interface Option {
   label: string;
@@ -24,38 +25,49 @@ export const Select: React.FC<SelectProps> = ({ value, onChange }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState<Option | null>(null);
-  const [stocks, setStocks] = useState<StockSymbolAPI[]>([]);
+  const [stocksAPI, setStocksAPI] = useState<StockSymbolAPI[]>([]);
+  const [availableStocks, setAvailableStocks] = useState<StockSymbolAPI[]>([]);
+
+  const { stocks } = useStockContext();
+
+  useEffect(() => {
+    const selectedSymbols = new Set(stocks.map(({ symbol }) => symbol));
+    const availableAPIStocks = stocksAPI.filter(
+      ({ symbol }) => !selectedSymbols.has(symbol)
+    );
+    setAvailableStocks(availableAPIStocks);
+  }, [stocks, stocksAPI]);
+
+  const filteredOptions = useMemo(() => {
+    const stocks = query
+      ? availableStocks.filter(({ symbol }) =>
+          symbol.toLowerCase().includes(query.toLowerCase())
+        )
+      : availableStocks.slice(0, 10);
+
+    return stocks.map((stock) => ({
+      label: stock.symbol,
+      value: stock.symbol,
+    }));
+  }, [query, availableStocks]);
 
   useEffect(() => {
     const getStocksApi = async () => {
       setIsLoading(true);
       try {
         const data = await getStocks();
-        setStocks([...data, ...defaultStocks]);
+        setStocksAPI([...data, ...defaultStocks]);
       } catch (error) {
         console.log(
           `There was an error to get stocks from api. Error: ${error}`
         );
-        setStocks(defaultStocks);
+        setStocksAPI(defaultStocks);
       } finally {
         setIsLoading(false);
       }
     };
     getStocksApi();
   }, []);
-
-  const filteredOptions = useMemo(() => {
-    if (!query) {
-      return stocks
-        .slice(0, 10)
-        .map((stock) => ({ label: stock.symbol, value: stock.symbol }));
-    }
-    return stocks
-      .filter((o: StockSymbolAPI) =>
-        o.symbol.toLowerCase().includes(query.toLowerCase())
-      )
-      .map((stock) => ({ label: stock.symbol, value: stock.symbol }));
-  }, [query, stocks]);
 
   const Option = ({
     index,
