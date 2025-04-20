@@ -47,7 +47,7 @@ export function Header() {
     const cleanup = finnHubWebSocket(stocks, handleTradeUpdate);
 
     return () => cleanup();
-  }, [stocks]);
+  }, [stocks, addGraphData]);
 
   return (
     <header
