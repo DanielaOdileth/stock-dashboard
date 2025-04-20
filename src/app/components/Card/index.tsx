@@ -1,16 +1,13 @@
 import React from "react";
 
-export function Card({
-  symbol,
-  price,
-  percentage,
-  priceAlert,
-}: {
+export type CardProps = {
   symbol: string;
   price: number;
   percentage: number;
   priceAlert: number;
-}) {
+};
+
+export function Card({ symbol, price, percentage, priceAlert }: CardProps) {
   let backgroundColor = "none";
 
   if (price && priceAlert) {

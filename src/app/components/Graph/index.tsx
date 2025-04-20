@@ -10,7 +10,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { useStockContext } from "../context/StockContext";
+import { useStockContext } from "../../context/StockContext";
 
 const colors = ["#8884d8", "#82ca9d", "#ff7300", "#d84a4a", "#00c49f"];
 

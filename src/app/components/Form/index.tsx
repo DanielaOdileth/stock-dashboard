@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Select } from "../Select";
-import { useStockContext } from "../context/StockContext";
+import { useStockContext } from "../../context/StockContext";
 
 export function Form() {
   const [symbolSelected, setSymbolSelected] = useState<string>("");

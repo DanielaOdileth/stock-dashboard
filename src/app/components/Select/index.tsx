@@ -2,7 +2,7 @@ import { getStocks } from "@/app/services/stocks";
 import { StockSymbolAPI } from "@/app/types/stock";
 import React, { useState, useMemo, useEffect } from "react";
 import { FixedSizeList as List } from "react-window";
-import { useStockContext } from "../context/StockContext";
+import { useStockContext } from "../../context/StockContext";
 
 export interface Option {
   label: string;

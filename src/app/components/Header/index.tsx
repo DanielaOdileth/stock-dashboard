@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Card } from "../Card";
 import finnHubWebSocket from "@/app/services/websocket";
 import { Report, Trade } from "@/app/types/stock";
-import { useStockContext } from "../context/StockContext";
+import { useStockContext } from "../../context/StockContext";
 
 export function Header() {
   const [stockData, setStockData] = useState<
