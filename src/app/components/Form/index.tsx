@@ -16,7 +16,10 @@ export function Form() {
   };
 
   return (
-    <div className="flex flex-col border-2 rounded-md rad w-1/2 p-3 m-3  shadow-sm">
+    <div className="flex flex-col border-2 rounded-xl h-96 w-11/12 xl:w-1/2 px-3 m-3 shadow-sm justify-center">
+      <label className="mb-10 text-xl uppercase font-bold">
+        Add your stocks
+      </label>
       <div className="flex items-center">
         <label htmlFor="stocks" className="mr-10">
           Stock:
@@ -28,13 +31,13 @@ export function Form() {
           value={symbolSelected}
         />
       </div>
-      <div className="flex mt-5">
+      <div className="flex mt-5  items-center">
         <label htmlFor="price" className="mr-10">
           Price:
         </label>
         <input
           type="number"
-          className="w-32 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-gray-500"
+          className="w-32 px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:border-gray-500"
           step="0.01"
           min="0"
           onChange={(e) => setPriceAlert(Number(e.target.value))}

@@ -36,7 +36,7 @@ export function Graph() {
   }, [graphData]);
 
   return (
-    <div className="w-full h-[400px] p-4 bg-white rounded-xl shadow-md">
+    <div className="w-11/12 xl:w-full h-96 p-4 rounded-xl m-2 border ">
       <h2 className="text-lg font-semibold mb-4">Stock Prices ($)</h2>
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={graphData}>

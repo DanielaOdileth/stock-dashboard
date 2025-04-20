@@ -15,7 +15,7 @@ export function Card({ symbol, price, percentage, priceAlert }: CardProps) {
   }
 
   return (
-    <div className={`flex flex-col w-64 text-white`}>
+    <div className={`flex flex-col min-w-48 xl:min-w-64 text-white`}>
       <div className={`mx-2 w-full ${backgroundColor}`}>
         <div className="m-1">
           <div className="flex justify-between text-sm">

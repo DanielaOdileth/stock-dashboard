@@ -4,9 +4,9 @@ import { Graph } from "./components/Graph";
 
 export default function Home() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-zinc-800 text-white">
       <Header />
-      <main className="flex w-full justify-between">
+      <main className="flex flex-col xl:flex-row w-full justify-between py-10 items-center">
         <Form />
         <Graph />
       </main>

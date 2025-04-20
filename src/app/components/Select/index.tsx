@@ -9,10 +9,10 @@ export interface Option {
   value: string;
 }
 
-interface SelectProps {
+export type SelectProps = {
   value?: string;
   onChange: (value: Option) => void;
-}
+};
 
 const defaultStocks = [
   { symbol: "OANDA:EUR_USD" },
@@ -20,7 +20,7 @@ const defaultStocks = [
   { symbol: "BINANCE:BTCUSDT" },
 ];
 
-export const Select: React.FC<SelectProps> = ({ value, onChange }) => {
+export function Select({ value, onChange }: SelectProps) {
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -96,7 +96,7 @@ export const Select: React.FC<SelectProps> = ({ value, onChange }) => {
   };
 
   return (
-    <div className="relative w-64">
+    <div className="relative w-64 text-black">
       <input
         type="text"
         className="w-full border px-4 py-2 rounded focus:outline-none focus:ring"
@@ -127,4 +127,4 @@ export const Select: React.FC<SelectProps> = ({ value, onChange }) => {
       )}
     </div>
   );
-};
+}
