@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Card } from "../Card";
 import finnHubWebSocket from "@/app/services/websocket";
-import { Trade } from "@/app/types/stock";
+import { Report, Trade } from "@/app/types/stock";
 import { useStockContext } from "../context/StockContext";
 
 export function Header() {
@@ -11,7 +11,7 @@ export function Header() {
     Record<string, { price: number; percentage: number; time: number }>
   >({});
 
-  const { stocks } = useStockContext();
+  const { stocks, addGraphData } = useStockContext();
 
   useEffect(() => {
     if (stocks.length === 0) {
@@ -21,6 +21,7 @@ export function Header() {
     function handleTradeUpdate(trades: Trade[]) {
       setStockData((prevData) => {
         const updatedData = { ...prevData };
+        const newGraphEntry: Report = { time: trades[0].t };
 
         trades.forEach(({ s: symbol, p: price, t: time }) => {
           const prev = prevData[symbol]?.price ?? price;
@@ -31,7 +32,13 @@ export function Header() {
             percentage,
             time,
           };
+
+          newGraphEntry[symbol] = price;
         });
+
+        if (Object.keys(newGraphEntry).length > 1) {
+          addGraphData(newGraphEntry);
+        }
 
         return updatedData;
       });

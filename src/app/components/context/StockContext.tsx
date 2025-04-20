@@ -1,6 +1,6 @@
 "use client";
 
-import { Symbol } from "@/app/types/stock";
+import { Report, Symbol } from "@/app/types/stock";
 import {
   createContext,
   useCallback,
@@ -9,21 +9,39 @@ import {
   useState,
 } from "react";
 
-type StockContextType = {
+const StockContext = createContext<StockContextType | undefined>(undefined);
+
+export type StockContextType = {
+  graphData: Report[];
   stocks: Symbol[];
   addStock: (symbol: Symbol) => void;
+  addGraphData: (entry: Report) => void;
 };
-
-const StockContext = createContext<StockContextType | undefined>(undefined);
 
 export const StockProvider = ({ children }: { children: React.ReactNode }) => {
   const [stocks, setStocks] = useState<Symbol[]>([]);
+  const [graphData, setGraphData] = useState<Report[]>([]);
 
   const addStock = useCallback((stock: Symbol) => {
     setStocks((prev) => (prev.includes(stock) ? prev : [...prev, stock]));
   }, []);
 
-  const value = useMemo(() => ({ stocks, addStock }), [stocks, addStock]);
+  const addGraphData = useCallback((entry: Report) => {
+    setGraphData((prev) => {
+      const updatedChart = [...prev, entry];
+
+      if (updatedChart.length > 50) {
+        updatedChart.shift();
+      }
+
+      return updatedChart;
+    });
+  }, []);
+
+  const value = useMemo(
+    () => ({ stocks, graphData, addStock, addGraphData }),
+    [stocks, graphData, addStock, addGraphData]
+  );
 
   return (
     <StockContext.Provider value={value}>{children}</StockContext.Provider>

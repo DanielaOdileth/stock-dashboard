@@ -11,3 +11,5 @@ export type Symbol = {
   symbol: string;
   priceAlert: number;
 };
+
+export type Report = { time: number; [symbol: string]: number };
