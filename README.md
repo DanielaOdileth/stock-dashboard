@@ -47,7 +47,7 @@ npm i
 npm run dev
 ```
 
-3. Go to `http://localhost:3000/` to check the app.
+5. Go to `http://localhost:3000/` to check the app.
 
 # Test
 
