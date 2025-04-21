@@ -28,16 +28,18 @@ node -v
 ```
 
 If it is lower, install the version by running.
-``bash
+
+```bash
 nvm install 18.18.0
 nvm use 18.18.0
 
-````
+```
 
 3. **Install dependencies**
+
 ```bash
 npm i
-````
+```
 
 4. ** Run the development server**
 
