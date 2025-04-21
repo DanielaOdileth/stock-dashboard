@@ -36,31 +36,33 @@ export function Graph() {
   }, [graphData]);
 
   return (
-    <div className="w-11/12 xl:w-full h-96 p-4 rounded-xl m-2 border ">
-      <h2 className="text-lg font-semibold mb-4">Stock Prices ($)</h2>
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={graphData}>
-          <XAxis
-            dataKey="time"
-            tickFormatter={(timestamp) =>
-              new Date(timestamp).toLocaleTimeString()
-            }
-          />
-          <YAxis domain={["auto", "auto"]} tickFormatter={(v) => `$${v}`} />
-          <Tooltip formatter={(v) => `$${v}`} />
-          <Legend />
-          {symbols.map((symbol, idx) => (
-            <Line
-              key={symbol}
-              type="monotone"
-              dataKey={symbol}
-              stroke={colors[idx % colors.length]}
-              strokeWidth={2}
-              dot={false}
+    graphData.length && (
+      <div className="w-11/12 xl:w-full h-96 p-4 rounded-xl m-2 border ">
+        <h2 className="text-lg font-semibold mb-4">Stock Prices ($)</h2>
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={graphData}>
+            <XAxis
+              dataKey="time"
+              tickFormatter={(timestamp) =>
+                new Date(timestamp).toLocaleTimeString()
+              }
             />
-          ))}
-        </LineChart>
-      </ResponsiveContainer>
-    </div>
+            <YAxis domain={["auto", "auto"]} tickFormatter={(v) => `$${v}`} />
+            <Tooltip formatter={(v) => `$${v}`} />
+            <Legend />
+            {symbols.map((symbol, idx) => (
+              <Line
+                key={symbol}
+                type="monotone"
+                dataKey={symbol}
+                stroke={colors[idx % colors.length]}
+                strokeWidth={2}
+                dot={false}
+              />
+            ))}
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    )
   );
 }
