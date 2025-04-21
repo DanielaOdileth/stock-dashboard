@@ -41,7 +41,7 @@ nvm use 18.18.0
 npm i
 ```
 
-4. ** Run the development server**
+4. **Run the app**
 
 ```bash
 npm run dev
