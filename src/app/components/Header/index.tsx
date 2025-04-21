@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Card } from "../Card";
-import finnHubWebSocket from "@/app/services/websocket";
 import { Report, Trade } from "@/app/types/stock";
 import { useStockContext } from "../../context/StockContext";
+import { useStockSocket } from "@/app/hooks/useStockSocket";
 
 export function Header() {
   const [stockData, setStockData] = useState<
@@ -13,41 +13,42 @@ export function Header() {
 
   const { stocks, addGraphData } = useStockContext();
 
-  useEffect(() => {
+  function handleTradeUpdate(trades: Trade[]) {
     if (stocks.length === 0) {
       return;
     }
 
-    function handleTradeUpdate(trades: Trade[]) {
-      setStockData((prevData) => {
-        const updatedData = { ...prevData };
-        const newGraphEntry: Report = { time: trades[0].t };
+    setStockData((prevData) => {
+      const updatedData = { ...prevData };
+      const newGraphEntry: Report = { time: trades[0].t };
 
-        trades.forEach(({ s: symbol, p: price, t: time }) => {
-          const prev = prevData[symbol]?.price ?? price;
-          const percentage = ((price - prev) / prev) * 100;
+      trades.forEach(({ s: symbol, p: price, t: time }) => {
+        const prev = prevData[symbol]?.price ?? price;
+        const percentage = ((price - prev) / prev) * 100;
 
-          updatedData[symbol] = {
-            price: price,
-            percentage,
-            time,
-          };
+        updatedData[symbol] = {
+          price: price,
+          percentage,
+          time,
+        };
 
-          newGraphEntry[symbol] = price;
-        });
-
-        if (Object.keys(newGraphEntry).length > 1) {
-          addGraphData(newGraphEntry);
-        }
-
-        return updatedData;
+        newGraphEntry[symbol] = price;
       });
-    }
 
-    const cleanup = finnHubWebSocket(stocks, handleTradeUpdate);
+      if (Object.keys(newGraphEntry).length > 1) {
+        addGraphData(newGraphEntry);
+      }
 
-    return () => cleanup();
-  }, [stocks, addGraphData]);
+      return updatedData;
+    });
+  }
+
+  useStockSocket({
+    symbols: stocks.map(({ symbol }) => symbol),
+    addTradeData: (trades) => {
+      handleTradeUpdate(trades);
+    },
+  });
 
   return (
     <header
