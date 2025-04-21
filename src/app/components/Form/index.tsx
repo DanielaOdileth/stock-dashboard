@@ -36,6 +36,7 @@ export function Form() {
           Price:
         </label>
         <input
+          id="price"
           type="number"
           className="w-32 px-3 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:border-gray-500"
           step="0.01"

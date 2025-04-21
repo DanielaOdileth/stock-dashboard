@@ -1,6 +1,13 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Card, CardProps } from "..";
+
+const mockRemoveStock = jest.fn();
+jest.mock("../../../context/StockContext", () => ({
+  useStockContext: () => ({
+    removeStock: mockRemoveStock,
+  }),
+}));
 
 const subject = (props: CardProps) => render(<Card {...props} />);
 
@@ -28,5 +35,14 @@ describe("Card", () => {
     const card = (await screen.findByText("BARN")).parentNode?.parentNode
       ?.parentNode;
     expect(card).toHaveClass("bg-red-900");
+  });
+
+  it("should remove card if click on x button", () => {
+    subject({ symbol: "BARN", price: 160, priceAlert: 140, percentage: 2.5 });
+    screen.getByText("BARN");
+
+    fireEvent.click(screen.getByRole("button", { name: "x" }));
+
+    expect(mockRemoveStock).toHaveBeenCalledWith("BARN");
   });
 });

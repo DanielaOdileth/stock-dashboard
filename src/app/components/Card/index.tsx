@@ -1,3 +1,4 @@
+import { useStockContext } from "@/app/context/StockContext";
 import React from "react";
 
 export type CardProps = {
@@ -8,6 +9,8 @@ export type CardProps = {
 };
 
 export function Card({ symbol, price, percentage, priceAlert }: CardProps) {
+  const { removeStock } = useStockContext();
+
   let backgroundColor = "none";
 
   if (price && priceAlert) {
@@ -18,6 +21,12 @@ export function Card({ symbol, price, percentage, priceAlert }: CardProps) {
     <div className={`flex flex-col min-w-48 xl:min-w-64 text-white`}>
       <div className={`mx-2 w-full ${backgroundColor}`}>
         <div className="m-1">
+          <button
+            className="flex justify-end w-full -mt-2 mb-2 text-sm cursor-pointer"
+            onClick={() => removeStock(symbol)}
+          >
+            x
+          </button>
           <div className="flex justify-between text-sm">
             <p className="mr-2">{symbol}</p>
             <p>{price.toFixed(2)}</p>

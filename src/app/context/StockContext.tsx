@@ -16,6 +16,7 @@ export type StockContextType = {
   stocks: Symbol[];
   addStock: (symbol: Symbol) => void;
   addGraphData: (entry: Report) => void;
+  removeStock: (symbol: string) => void;
 };
 
 export const StockProvider = ({ children }: { children: React.ReactNode }) => {
@@ -24,6 +25,12 @@ export const StockProvider = ({ children }: { children: React.ReactNode }) => {
 
   const addStock = useCallback((stock: Symbol) => {
     setStocks((prev) => (prev.includes(stock) ? prev : [...prev, stock]));
+  }, []);
+
+  const removeStock = useCallback((symbol: string) => {
+    setStocks((prevStocks) =>
+      prevStocks.filter((stock) => stock.symbol !== symbol)
+    );
   }, []);
 
   const addGraphData = useCallback((entry: Report) => {
@@ -39,8 +46,8 @@ export const StockProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const value = useMemo(
-    () => ({ stocks, graphData, addStock, addGraphData }),
-    [stocks, graphData, addStock, addGraphData]
+    () => ({ stocks, graphData, addStock, addGraphData, removeStock }),
+    [stocks, graphData, addStock, addGraphData, removeStock]
   );
 
   return (
