@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Card } from "../Card";
-import { Report, Trade } from "@/app/types/stock";
+import { Trade } from "@/app/types/stock";
 import { useStockContext } from "../../context/StockContext";
 import { useStockSocket } from "@/app/hooks/useStockSocket";
 
@@ -11,7 +11,7 @@ export function Header() {
     Record<string, { price: number; percentage: number; time: number }>
   >({});
 
-  const { stocks, addGraphData } = useStockContext();
+  const { stocks } = useStockContext();
 
   function handleTradeUpdate(trades: Trade[]) {
     if (stocks.length === 0) {
@@ -20,7 +20,6 @@ export function Header() {
 
     setStockData((prevData) => {
       const updatedData = { ...prevData };
-      const newGraphEntry: Report = { time: trades[0].t };
 
       trades.forEach(({ s: symbol, p: price, t: time }) => {
         const prev = prevData[symbol]?.price ?? price;
@@ -31,13 +30,7 @@ export function Header() {
           percentage,
           time,
         };
-
-        newGraphEntry[symbol] = price;
       });
-
-      if (Object.keys(newGraphEntry).length > 1) {
-        addGraphData(newGraphEntry);
-      }
 
       return updatedData;
     });
